@@ -8,8 +8,18 @@ import { ImageWithFallback } from "../../components/shared/ImageWithFallback";
 import { Heart } from "lucide-react";
 
 function GoodsItem(props) {
-  const { id, title, price, rating, image, brand, model, color, discount } =
-    props;
+  const {
+    id,
+    title,
+    price,
+    rating,
+    reviews,
+    images,
+    brand,
+    category,
+    tags,
+    discountPercentage,
+  } = props;
   const { state } = useContext(ShopContext);
   const { cart, wishlist } = state;
   const [quantity] = useState(1);
@@ -18,20 +28,22 @@ function GoodsItem(props) {
 
   const isInWishlist = wishlist.some((item) => item.id === id);
 
-  const discountedPrice = price * (1 - discount / 100);
+  const discountedPrice = price * (1 - discountPercentage / 100);
 
   const handleAddToCart = () => {
     addToCart(cart, {
       id,
       title,
       price,
-      image,
-      brand,
-      model,
-      color,
+      image: images[0],
+      ...(brand !== undefined && { brand }),
+      ...(category !== undefined && { category }),
+      ...(tags !== undefined && { tags }),
       quantity,
-      ...(!isNaN(discountedPrice) && { discountedPrice }),
-      ...(typeof discount !== "undefined" && { discount }),
+      rating,
+      reviewCount: reviews.length,
+      ...(discountPercentage !== undefined && { discountedPrice }),
+      ...(discountPercentage !== undefined && { discount: discountPercentage }),
     });
   };
 
@@ -40,12 +52,13 @@ function GoodsItem(props) {
       id,
       title,
       price,
-      image,
-      brand,
-      model,
-      color,
-      discountedPrice,
-      discount,
+      image: images[0],
+      ...(brand !== undefined && { brand }),
+      ...(category !== undefined && { category }),
+      ...(tags !== undefined && { tags }),
+      discountPercentage,
+      rating,
+      reviewCount: reviews.length,
     });
   };
 
@@ -57,9 +70,9 @@ function GoodsItem(props) {
     <li className="list__item" product-id={id}>
       <div className="card">
         <div className="card__img">
-          <ImageWithFallback src={image} alt={title} />
-          {typeof discount !== "undefined" && (
-            <span className="discount">-{discount}%</span>
+          <ImageWithFallback src={images[0]} alt={title} />
+          {discountPercentage !== undefined && (
+            <span className="discount">-{discountPercentage}%</span>
           )}
           <div className="card__wishlist">
             {isInWishlist ? (
@@ -67,7 +80,12 @@ function GoodsItem(props) {
                 className="remove-from-wishlist"
                 onClick={handleRemoveFromWishlist}
               >
-                <Heart strokeWidth="1.2" size="20" fill="#E50010" stroke="#E50010" />
+                <Heart
+                  strokeWidth="1.2"
+                  size="20"
+                  fill="#E50010"
+                  stroke="#E50010"
+                />
               </button>
             ) : (
               <button className="add-to-wishlist" onClick={handleAddToWishlist}>
@@ -83,12 +101,12 @@ function GoodsItem(props) {
           <div className="price">
             <span
               className={`price__full ${
-                !isNaN(discountedPrice) ? "price__full--crossed" : ""
+                discountPercentage !== undefined ? "price__full--crossed" : ""
               }`}
             >
               ${price.toFixed(2)}
             </span>
-            {!isNaN(discountedPrice) && (
+            {discountPercentage !== undefined && (
               <span className="price__discounted">
                 ${discountedPrice.toFixed(2)}
               </span>
@@ -98,8 +116,8 @@ function GoodsItem(props) {
             {title}
           </Link>
           <div className="rating">
-            <div className="stars">{renderStars(rating.rate)}</div>
-            <span className="reviews">{rating.count} reviews</span>
+            <div className="stars">{renderStars(rating)}</div>
+            <span className="reviews">{reviews.length} reviews</span>
           </div>
         </div>
       </div>

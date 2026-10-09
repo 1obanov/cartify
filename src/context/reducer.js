@@ -7,6 +7,9 @@ export const shopReducer = (state, action) => {
         loadingGoods: false,
       };
 
+    case "SET_LOADING_GOODS":
+      return { ...state, loadingGoods: action.payload };
+
     case "SET_CART":
       return { ...state, cart: action.payload, loadingCart: false };
 

@@ -31,14 +31,19 @@ export const useWishlistActions = () => {
           title: product.title,
           price: product.price,
           image: product.image,
-          brand: product.brand,
-          model: product.model,
-          color: product.color,
-          ...(!isNaN(product.discountedPrice) && {
-            discountedPrice: product.discountedPrice,
+          ...(product.brand !== undefined && { brand: product.brand }),
+          ...(product.category !== undefined && { category: product.category }),
+          ...(product.tags !== undefined && { tags: product.tags }),
+          ...(product.rating !== undefined && { rating: product.rating }),
+          ...(product.reviewCount !== undefined && {
+            reviewCount: product.reviewCount,
           }),
-          ...(typeof product.discount !== "undefined" && {
-            discount: product.discount,
+          ...(product.discountPercentage !== undefined && {
+            discountedPrice:
+              product.price * (1 - product.discountPercentage / 100),
+          }),
+          ...(product.discountPercentage !== undefined && {
+            discount: product.discountPercentage,
           }),
         },
       ];

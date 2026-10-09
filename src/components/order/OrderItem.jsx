@@ -8,8 +8,8 @@ function OrderItem({
   image,
   price,
   brand,
-  model,
-  color,
+  category,
+  tags,
   quantity,
   discountedPrice,
   showInfo = true,
@@ -48,16 +48,16 @@ function OrderItem({
                     <dd>{brand}</dd>
                   </>
                 )}
-                {model && (
+                {category && (
                   <>
-                    <dt>Model:</dt>
-                    <dd>{model}</dd>
+                    <dt>Category:</dt>
+                    <dd>{category}</dd>
                   </>
                 )}
-                {color && (
+                {tags?.length > 0 && (
                   <>
-                    <dt>Color:</dt>
-                    <dd>{color}</dd>
+                    <dt>Tags:</dt>
+                    <dd>{tags.join(", ")}</dd>
                   </>
                 )}
                 {quantity && (

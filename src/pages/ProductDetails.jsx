@@ -6,15 +6,16 @@ import { renderStars } from "../utils/renderStars";
 import { useWishlistActions } from "../hooks/useWishlistActions";
 import { useCartActions } from "../hooks/useCartActions";
 import { ImageWithFallback } from "../components/shared/ImageWithFallback";
-import { House, Heart } from "lucide-react";
+import { House, Heart, TriangleAlert } from "lucide-react";
 
 import "toastify-js/src/toastify.css";
 
 function ProductDetails() {
   const { id } = useParams();
   const { state, dispatch } = useContext(ShopContext);
-  const { product, loadingProduct, cart, ratings, wishlist } = state;
+  const { product, loadingProduct, cart, wishlist } = state;
   const [quantity, setQuantity] = useState(1);
+  const [productError, setProductError] = useState("");
   const { addToWishlist, removeFromWishlist } = useWishlistActions();
   const { addToCart } = useCartActions();
 
@@ -22,7 +23,8 @@ function ProductDetails() {
   const isInWishlist = wishlist.some((item) => item.id === product.id);
 
   // Calculating the discounted price
-  const discountedPrice = product.price * (1 - product.discount / 100);
+  const discountedPrice =
+    product.price * (1 - product.discountPercentage / 100);
 
   // Function to handle the adding the product to the cart
   const handleAddToCart = () => {
@@ -30,15 +32,17 @@ function ProductDetails() {
       id: product.id,
       title: product.title,
       price: product.price,
-      image: product.image,
-      brand: product.brand,
-      model: product.model,
-      color: product.color,
+      image: product.images?.[0],
+      ...(product.brand !== undefined && { brand: product.brand }),
+      ...(product.category !== undefined && { category: product.category }),
+      ...(product.tags !== undefined && { tags: product.tags }),
       quantity,
-      ...(!isNaN(discountedPrice) && { discountedPrice }),
-      ...(typeof product.discount !== "undefined" && {
-        discount: product.discount,
+      ...(product.discountPercentage !== undefined && { discountedPrice }),
+      ...(product.discountPercentage !== undefined && {
+        discount: product.discountPercentage,
       }),
+      rating: product.rating,
+      reviewCount: product.reviews.length,
     });
   };
 
@@ -48,12 +52,13 @@ function ProductDetails() {
       id: product.id,
       title: product.title,
       price: product.price,
-      image: product.image,
-      brand: product.brand,
-      model: product.model,
-      color: product.color,
-      discountedPrice,
-      discount: product.discount,
+      image: product.images?.[0],
+      ...(product.brand !== undefined && { brand: product.brand }),
+      ...(product.category !== undefined && { category: product.category }),
+      ...(product.tags !== undefined && { tags: product.tags }),
+      discountPercentage: product.discountPercentage,
+      rating: product.rating,
+      reviewCount: product.reviews.length,
     });
   };
 
@@ -74,28 +79,60 @@ function ProductDetails() {
   };
 
   useEffect(() => {
-    // Fetching product details by id from the API
-    fetch(`https://fakestoreapi.in/api/products/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        if (data) {
-          const productWithRating = {
-            ...data.product,
-            rating: ratings[data.product.id],
-          };
-          dispatch({ type: "SET_PRODUCT", payload: productWithRating });
+    const controller = new AbortController();
+    setProductError("");
+
+    fetch(`https://dummyjson.com/products/${id}`, {
+      signal: controller.signal,
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Product request failed with status ${response.status}`,
+          );
         }
+        return response.json();
+      })
+      .then((data) => {
+        if (!data || !data.id) {
+          throw new Error("Product was missing from the API response");
+        }
+
+        dispatch({ type: "SET_PRODUCT", payload: data });
+      })
+      .catch((error) => {
+        if (error.name === "AbortError") return;
+
+        console.error("Error fetching product details:", error);
+        setProductError("Could not load this product. Please try again later.");
+        dispatch({ type: "SET_LOADING_PRODUCT", payload: false });
       });
 
-    // Cleanup function to clear product details when the component unmounts or id changes
+    // Clear the product when the component unmounts or the id changes.
     return () => {
+      controller.abort();
       dispatch({ type: "CLEAR_PRODUCT" });
       dispatch({ type: "SET_LOADING_PRODUCT", payload: true });
     };
-  }, [id, dispatch, ratings]);
+  }, [id, dispatch]);
 
   return loadingProduct ? (
     <Preloader />
+  ) : productError ? (
+    <div className="section product-details">
+      <div className="container">
+        <div className="api-error">
+          <span className="api-error__icon">
+            <TriangleAlert size={28} strokeWidth={1.6} />
+          </span>
+          <h1>Product unavailable</h1>
+          <p>{productError}</p>
+          <Link to="/" className="btn">
+            Back to shop
+          </Link>
+        </div>
+      </div>
+    </div>
   ) : (
     <div className="section product-details">
       <div className="breadcrumb">
@@ -114,18 +151,20 @@ function ProductDetails() {
       <div className="container">
         <div className="product-details__wrapper">
           <div className="product-details__image">
-            <ImageWithFallback src={product.image} alt={product.title} />
+            <ImageWithFallback src={product.images?.[0]} alt={product.title} />
           </div>
           <div className="product-details__info">
             <div className="price">
               <span
                 className={`price__full ${
-                  !isNaN(discountedPrice) ? "price__full--crossed" : ""
+                  product.discountPercentage !== undefined
+                    ? "price__full--crossed"
+                    : ""
                 }`}
               >
                 {product && product.price && `$${product.price.toFixed(2)}`}
               </span>
-              {!isNaN(discountedPrice) && (
+              {product.discountPercentage !== undefined && (
                 <span className="price__discounted">
                   ${discountedPrice.toFixed(2)}
                 </span>
@@ -135,12 +174,10 @@ function ProductDetails() {
             <div className="rating">
               {product.rating ? (
                 <>
-                  <div className="stars">
-                    {renderStars(product.rating.rate)}
-                  </div>
+                  <div className="stars">{renderStars(product.rating)}</div>
                   <span className="divider">|</span>
                   <span className="reviews">
-                    ({product.rating.count} customer review)
+                    ({product.reviews.length} customer reviews)
                   </span>
                 </>
               ) : (
@@ -163,7 +200,7 @@ function ProductDetails() {
                   value={quantity}
                   onChange={(e) =>
                     setQuantity(
-                      Math.max(1, Math.min(20, parseInt(e.target.value) || 1))
+                      Math.max(1, Math.min(20, parseInt(e.target.value) || 1)),
                     )
                   }
                 />
@@ -205,28 +242,28 @@ function ProductDetails() {
             </div>
             <div className="product-details__meta">
               <dl>
+                {product.sku && (
+                  <>
+                    <dt>SKU:</dt>
+                    <dd>{product.sku}</dd>
+                  </>
+                )}
                 {product.brand && (
                   <>
                     <dt>Brand:</dt>
                     <dd>{product.brand}</dd>
                   </>
                 )}
-                {product.model && (
-                  <>
-                    <dt>Model:</dt>
-                    <dd>{product.model}</dd>
-                  </>
-                )}
-                {product.color && (
-                  <>
-                    <dt>Color:</dt>
-                    <dd>{product.color}</dd>
-                  </>
-                )}
                 {product.category && (
                   <>
                     <dt>Category:</dt>
                     <dd>{product.category}</dd>
+                  </>
+                )}
+                {product.tags && (
+                  <>
+                    <dt>Tags:</dt>
+                    <dd>{product.tags.join(", ")}</dd>
                   </>
                 )}
               </dl>

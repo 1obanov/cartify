@@ -60,8 +60,8 @@ function CartItem(props) {
     image,
     quantity,
     brand,
-    model,
-    color,
+    category,
+    tags,
   } = props;
 
   const { state, dispatch } = useContext(ShopContext);
@@ -87,8 +87,8 @@ function CartItem(props) {
       price,
       image,
       brand,
-      model,
-      color,
+      category,
+      tags,
       discountedPrice,
       discount,
     });
@@ -106,7 +106,7 @@ function CartItem(props) {
       const userCartRef = doc(db, "carts", auth.currentUser.uid);
       await updateDoc(userCartRef, {
         items: cart.map((item) =>
-          item.id === id ? { ...item, quantity: newQuantity } : item
+          item.id === id ? { ...item, quantity: newQuantity } : item,
         ),
       });
     } else {
@@ -151,16 +151,16 @@ function CartItem(props) {
                     <dd>{brand}</dd>
                   </>
                 )}
-                {model && (
+                {category && (
                   <>
-                    <dt>Model:</dt>
-                    <dd>{model}</dd>
+                    <dt>Category:</dt>
+                    <dd>{category}</dd>
                   </>
                 )}
-                {color && (
+                {tags?.length > 0 && (
                   <>
-                    <dt>Color:</dt>
-                    <dd>{color}</dd>
+                    <dt>Tags:</dt>
+                    <dd>{tags.join(", ")}</dd>
                   </>
                 )}
               </dl>

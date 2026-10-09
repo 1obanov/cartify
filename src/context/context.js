@@ -28,26 +28,8 @@ const initialState = {
   loadingProduct: true,
   loadingWishlist: true,
   product: {},
-  ratings: generateRandomRatings(50),
   currentStep: 0,
 };
-
-// Function to generate random ratings for products
-function generateRandomRatings(count) {
-  const ratings = {};
-
-  for (let i = 1; i <= count; i++) {
-    const rate = (Math.random() * (5 - 1) + 1).toFixed(1);
-    const count = Math.floor(Math.random() * 500) + 1;
-
-    ratings[i] = {
-      rate: parseFloat(rate),
-      count: count,
-    };
-  }
-
-  return ratings;
-}
 
 // Context provider component that wraps children and provides state and dispatch
 export const ContextProvider = ({ children }) => {

@@ -14,19 +14,16 @@ function WishListItem(props) {
     price,
     image,
     brand,
-    model,
-    color,
+    category,
+    tags,
     discount,
     discountedPrice,
   } = props;
   const { state } = useContext(ShopContext);
-  const { cart, ratings } = state;
+  const { cart } = state;
   const [quantity] = useState(1);
   const { removeFromWishlist } = useWishlistActions();
   const { addToCart } = useCartActions();
-
-  // Fetch the product rating using product ID;
-  const productRating = ratings[id] || { rate: "No rating", count: 0 };
 
   // Function to handle adding product to the shopping cart
   const handleAddToCart = () => {
@@ -35,9 +32,9 @@ function WishListItem(props) {
       title,
       price,
       image,
-      brand,
-      model,
-      color,
+      ...(brand !== undefined && { brand }),
+      ...(category !== undefined && { category }),
+      ...(tags !== undefined && { tags }),
       quantity,
       ...(!isNaN(discountedPrice) && { discountedPrice }),
       ...(typeof discount !== "undefined" && { discount }),
@@ -86,8 +83,14 @@ function WishListItem(props) {
             {title}
           </Link>
           <div className="rating">
-            <div className="stars">{renderStars(productRating.rate)}</div>
-            <span className="reviews">{productRating.count} reviews</span>
+            {typeof props.rating === "number" ? (
+              <>
+                <div className="stars">{renderStars(props.rating)}</div>
+                <span className="reviews">{props.reviewCount ?? 0} reviews</span>
+              </>
+            ) : (
+              <span className="reviews">No reviews yet</span>
+            )}
           </div>
         </div>
       </div>
