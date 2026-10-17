@@ -7,9 +7,9 @@
 
   &__wrapper {
     display: grid;
-    grid-template-columns: auto 576px;
     align-items: center;
     gap: 40px;
+    grid-template-columns: auto 576px;
 
     @media (max-width: 1023px) {
       grid-template-columns: 1fr;

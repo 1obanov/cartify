@@ -4,12 +4,12 @@
   gap: 10px;
 
   &__wrapper {
-    color: var(--black);
-    text-decoration: none;
     display: flex;
     justify-content: space-between;
     gap: 20px;
     width: 100%;
+    color: var(--black);
+    text-decoration: none;
 
     @media (hover: hover) {
       &:hover {
@@ -21,11 +21,11 @@
   }
 
   .image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100px;
     height: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     flex-shrink: 0;
 
     @include image-container(100px);
@@ -36,6 +36,7 @@
 
     &--small {
       width: 60px;
+
       @include image-container(60px);
     }
   }
@@ -47,14 +48,14 @@
     flex-grow: 1;
 
     .title {
+      display: -webkit-box;
       font-size: 14px;
       font-weight: 500;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
+      transition: opacity 0.3s;
       -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
       overflow: hidden;
       text-overflow: ellipsis;
-      transition: opacity 0.3s;
     }
 
     .info {
@@ -63,17 +64,17 @@
         color: var(--gray-600);
 
         dt {
-          float: left;
-          clear: left;
-          font-size: 12px;
           padding: 2px 0;
+          font-size: 12px;
+          clear: left;
+          float: left;
           margin-right: 5px;
         }
 
         dd {
-          margin-left: 60px;
           padding: 2px 0;
           font-size: 12px;
+          margin-left: 60px;
           text-transform: capitalize;
         }
       }
@@ -82,27 +83,27 @@
 
   .price {
     display: flex;
-    align-items: flex-end;
     flex-direction: column;
+    align-items: flex-end;
     gap: 5px;
 
     &__full {
-      text-align: center;
-      font-weight: 700;
       font-size: 16px;
+      font-weight: 700;
+      text-align: center;
 
       &--crossed {
-        text-decoration: line-through;
+        font-size: 14px;
         font-weight: 400;
         color: var(--gray-600);
-        font-size: 14px;
+        text-decoration: line-through;
       }
     }
 
     &__discounted {
-      text-align: center;
-      font-weight: 700;
       font-size: 16px;
+      font-weight: 700;
+      text-align: center;
     }
   }
 }

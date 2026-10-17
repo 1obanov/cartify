@@ -6,8 +6,8 @@
 
   &-row {
     display: grid;
-    grid-template-columns: 1fr;
     gap: 20px;
+    grid-template-columns: 1fr;
 
     &--half {
       grid-template-columns: repeat(2, 1fr);
@@ -26,23 +26,25 @@
       position: relative;
 
       label {
+        position: absolute;
+        top: 50%;
+        left: 12px;
         font-size: 16px;
         font-weight: 500;
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
         color: var(--gray-600);
-        transition: transform 0.3s, font-size 0.3s;
+        transform: translateY(-50%);
+        transition:
+          transform 0.3s,
+          font-size 0.3s;
       }
 
       input {
+        width: 100%;
         padding: 18px 12px;
         border: 1px solid var(--gray-400);
         border-radius: 4px;
-        width: 100%;
-        outline: none;
         transition: border-color 0.3s;
+        outline: none;
 
         @media (hover: hover) {
           &:hover {
@@ -64,12 +66,12 @@
         }
       }
 
-      input:not(.date-picker-input):not(:placeholder-shown) {
+      input:not(.date-picker-input, :placeholder-shown) {
         padding: 24px 12px 12px;
       }
 
       input:not(.date-picker-input):focus ~ .label,
-      input:not(.date-picker-input):not(:placeholder-shown) ~ .label,
+      input:not(.date-picker-input, :placeholder-shown) ~ .label,
       input:not(.date-picker-input):-webkit-autofill ~ .label {
         font-size: 12px;
         transform: translateY(calc(-50% - 12px));
@@ -77,15 +79,17 @@
 
       input:not(.date-picker-input):-webkit-autofill {
         padding: 24px 12px 12px;
+        box-shadow: 0 0 0 1000px var(--white) inset;
         background-clip: text;
-        -webkit-box-shadow: 0 0 0px 1000px var(--white) inset;
       }
 
       .password-toggle {
-        display: flex;
         position: absolute;
-        right: 12px;
         top: 50%;
+        right: 12px;
+        display: flex;
+        background-color: transparent;
+        border: none;
         transform: translateY(-50%);
         cursor: pointer;
       }
@@ -109,16 +113,16 @@
 
     &--radio {
       .label {
-        margin-bottom: 10px;
         display: flex;
-        align-items: center;
         justify-content: space-between;
+        align-items: center;
         gap: 10px;
         padding: 10px;
         border: 1px solid var(--gray-400);
         border-radius: 4px;
-        cursor: pointer;
         transition: border-color 0.3s;
+        cursor: pointer;
+        margin-bottom: 10px;
 
         @media (hover: hover) {
           &:hover {
@@ -149,55 +153,52 @@
           [type="radio"]:checked + span,
           [type="radio"]:not(:checked) + span {
             position: relative;
-            padding-left: 28px;
-            cursor: pointer;
-            line-height: 20px;
             display: flex;
             flex-direction: column;
             gap: 2px;
+            line-height: 20px;
             color: var(--black);
+            cursor: pointer;
+            padding-left: 28px;
           }
 
-          [type="radio"]:checked + span:before,
-          [type="radio"]:not(:checked) + span:before {
-            content: "";
+          [type="radio"]:checked + span::before,
+          [type="radio"]:not(:checked) + span::before {
             position: absolute;
-            left: 0;
             top: 2px;
+            left: 0;
             width: 18px;
             height: 18px;
+            background-color: var(--white);
             border: 1px solid var(--gray-500);
             border-radius: 100%;
-            background-color: var(--white);
+            content: "";
           }
 
-          [type="radio"]:checked + span:after,
-          [type="radio"]:not(:checked) + span:after {
-            content: "";
-            width: 12px;
-            height: 12px;
-            background-color: var(--black);
+          [type="radio"]:checked + span::after,
+          [type="radio"]:not(:checked) + span::after {
             position: absolute;
             top: 5px;
             left: 3px;
+            width: 12px;
+            height: 12px;
+            background-color: var(--black);
             border-radius: 100%;
-            -webkit-transition: all 0.3s ease;
             transition: all 0.3s ease;
+            content: "";
           }
 
-          [type="radio"]:not(:checked) + span:after {
+          [type="radio"]:not(:checked) + span::after {
             opacity: 0;
-            -webkit-transform: scale(0);
             transform: scale(0);
           }
 
-          [type="radio"]:checked + span:after {
+          [type="radio"]:checked + span::after {
             opacity: 1;
-            -webkit-transform: scale(1);
             transform: scale(1);
           }
 
-          [type="radio"]:checked + span:before {
+          [type="radio"]:checked + span::before {
             border: 1px solid var(--black);
           }
         }
@@ -211,7 +212,7 @@
 }
 
 .error {
-  color: red;
-  font-size: 12px;
   margin: 5px 0 0;
+  font-size: 12px;
+  color: red;
 }

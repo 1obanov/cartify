@@ -1,0 +1,52 @@
+{
+  "extends": ["stylelint-config-standard-scss"],
+  "plugins": ["stylelint-order"],
+  "rules": {
+    "color-function-alias-notation": "with-alpha",
+    "color-function-notation": null,
+    "keyframes-name-pattern": "^[a-z][a-zA-Z0-9-]*$",
+    "media-feature-range-notation": "prefix",
+    "order/properties-order": [
+      [
+        "position",
+        "top",
+        "right",
+        "bottom",
+        "left",
+        "z-index",
+        "display",
+        "flex",
+        "flex-direction",
+        "justify-content",
+        "align-items",
+        "gap",
+        "grid-template-columns",
+        "width",
+        "min-width",
+        "max-width",
+        "height",
+        "min-height",
+        "max-height",
+        "padding",
+        "margin",
+        "font-family",
+        "font-size",
+        "font-weight",
+        "line-height",
+        "color",
+        "background",
+        "background-color",
+        "border",
+        "border-radius",
+        "box-shadow",
+        "opacity",
+        "transform",
+        "transition"
+      ],
+      {
+        "unspecified": "bottomAlphabetical"
+      }
+    ],
+    "selector-class-pattern": "^[A-Za-z][A-Za-z0-9]*(?:-[A-Za-z0-9]+)*(?:__[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)?(?:--[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*)?$"
+  }
+}

@@ -1,14 +1,14 @@
 .card {
-  margin: 0;
-  height: 100%;
+  position: relative;
   display: flex;
   flex-direction: column;
-  position: relative;
+  height: 100%;
+  margin: 0;
   transition: box-shadow 0.3s;
 
   @media (hover: hover) {
     &:hover {
-      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 10%);
 
       .btn {
         top: calc(100% - 34px - 20px);
@@ -19,34 +19,35 @@
 
   &__img {
     width: 100%;
+
     @include image-container;
 
     .discount {
-      background-color: var(--primary);
-      color: var(--white);
-      font-size: 11px;
-      padding: 3px 6px;
-      font-weight: 700;
-      border-radius: 3px;
       position: absolute;
       top: 10px;
       left: 10px;
+      padding: 3px 6px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--white);
+      background-color: var(--primary);
+      border-radius: 3px;
       text-transform: capitalize;
     }
 
     .remove-from-wishlist,
     .add-to-wishlist {
       position: absolute;
-      right: 0;
       top: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 36px;
       height: 36px;
       padding: 8px;
       background-color: transparent;
       border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
 
       svg {
         width: 100%;
@@ -62,8 +63,8 @@
       position: absolute;
       top: 100%;
       left: 50%;
-      transform: translateX(-50%);
       opacity: 0;
+      transform: translateX(-50%);
 
       @media (max-width: 767px) {
         top: calc(100% - 34px - 20px);
@@ -73,13 +74,13 @@
   }
 
   &__body {
-    padding: 16px;
-    color: var(--black);
     display: flex;
     flex-direction: column;
-    align-items: center;
     justify-content: center;
+    align-items: center;
     gap: 10px 0;
+    padding: 16px;
+    color: var(--black);
 
     .price {
       display: flex;
@@ -87,39 +88,39 @@
       gap: 10px;
 
       &__full {
-        text-align: center;
-        font-weight: 700;
         font-size: 16px;
+        font-weight: 700;
+        text-align: center;
 
         &--crossed {
-          text-decoration: line-through;
+          font-size: 14px;
           font-weight: 400;
           color: var(--gray-600);
-          font-size: 14px;
+          text-decoration: line-through;
         }
       }
 
       &__discounted {
-        text-align: center;
-        font-weight: 700;
         font-size: 16px;
+        font-weight: 700;
+        text-align: center;
       }
     }
 
     .title {
       position: relative;
-      color: var(--black);
-      font-size: 15px;
-      margin: 0;
-      font-weight: 500;
       display: inline-block;
       width: 100%;
-      white-space: nowrap;
+      margin: 0;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--black);
+      transition: opacity 0.3s ease-out;
       overflow: hidden !important;
-      text-overflow: ellipsis;
       text-align: center;
       text-decoration: none;
-      transition: opacity 0.3s ease-out;
+      text-overflow: ellipsis;
+      white-space: nowrap;
 
       @media (hover: hover) {
         &:hover {

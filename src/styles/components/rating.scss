@@ -12,8 +12,8 @@
     align-items: center;
 
     &__ico {
-      display: flex;
       position: relative;
+      display: flex;
 
       .star-half--rotate {
         position: absolute;
@@ -28,8 +28,8 @@
   }
 
   .reviews {
-    text-align: center;
     font-size: 14px;
     color: var(--gray-600);
+    text-align: center;
   }
 }

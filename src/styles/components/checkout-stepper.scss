@@ -11,15 +11,15 @@
     position: relative;
     display: flex;
     align-items: center;
-    color: var(--gray-600);
     font-weight: 600;
+    color: var(--gray-600);
 
     &::after {
-      content: "";
       display: inline-block;
       width: 30px;
       height: 1px;
       background-color: var(--gray-250);
+      content: "";
       margin-left: 20px;
 
       @media (max-width: 767px) {
@@ -40,10 +40,10 @@
   }
 
   &__indicator {
-    font-size: 16px;
-    margin-right: 10px;
     display: flex;
     align-items: center;
+    font-size: 16px;
+    margin-right: 10px;
   }
 
   &__title {

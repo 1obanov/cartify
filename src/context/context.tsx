@@ -1,0 +1,152 @@
+import { createContext, useReducer, useEffect, useContext } from "react";
+import type { Dispatch, ReactNode } from "react";
+import { shopReducer } from "./reducer";
+import type {
+  CartItem,
+  ShopAction,
+  ShopState,
+  UserDetails,
+  UserOrder,
+  WishlistItem,
+} from "./reducer";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebase";
+import { mergeCarts } from "../utils/mergeCarts";
+import { subscribeToWishlist } from "../utils/subscribeToWishlist";
+import { subscribeToCart } from "../utils/subscribeToCart";
+import { subscribeUserDetails } from "../utils/subscribeUserDetails";
+import { subscribeToOrders } from "../utils/subscribeToOrders";
+
+type ShopContextValue = {
+  state: ShopState;
+  dispatch: Dispatch<ShopAction>;
+};
+
+export function useShopContext() {
+  const context = useContext(ShopContext);
+
+  if (context === null) {
+    throw new Error("useShopContext must be used inside ContextProvider");
+  }
+
+  return context;
+}
+
+// Create a context for the shop state
+export const ShopContext = createContext<ShopContextValue | null>(null);
+
+// Initial state for the shop context
+const initialState: ShopState = {
+  goods: [],
+  cart: JSON.parse(localStorage.getItem("cartItems") ?? "[]"),
+  userOrders: [],
+  userDetails: null,
+  wishlist: [],
+  isAuthenticated: null,
+  isMiniCartShow: false,
+  isPopupShow: false,
+  loadingGoods: true,
+  loadingCart: true,
+  loadingUserOrders: true,
+  loadingUserDetails: true,
+  loadingProduct: true,
+  loadingWishlist: true,
+  product: null,
+  currentStep: 0,
+};
+
+// Context provider component that wraps children and provides state and dispatch
+export const ContextProvider = ({ children }: { children: ReactNode }) => {
+  const [state, dispatch] = useReducer(shopReducer, initialState);
+
+  useEffect(() => {
+    // Subscribing to the user's authentication state
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Set the user as authenticated in state
+        dispatch({ type: "SET_AUTHENTICATED", payload: true });
+
+        // Merge cart from previous sessions if any
+        await mergeCarts(user.uid);
+
+        // Subscribe to user details
+        const unsubscribeUserDetails = subscribeUserDetails(
+          user.uid,
+          (details: UserDetails | null) => {
+            dispatch({
+              type: "SET_USER_DETAILS",
+              payload: { userDetails: details, loadingUserDetails: false },
+            });
+          },
+        );
+
+        // Subscribe to orders
+        const unsubscribeOrders = subscribeToOrders(
+          user.uid,
+          (orders: UserOrder[]) => {
+            dispatch({
+              type: "SET_USER_ORDER",
+              payload: { userOrders: orders, loadingUserOrders: false },
+            });
+          },
+        );
+
+        // Subscribe to wishlist
+        const unsubscribeWishlist = subscribeToWishlist(
+          user.uid,
+          (items: WishlistItem[]) => {
+            dispatch({ type: "SET_WISHLIST", payload: items });
+          },
+        );
+
+        // Subscribe to cart updates
+        const unsubscribeToCart = subscribeToCart(
+          user.uid,
+          (items: CartItem[]) => {
+            dispatch({ type: "SET_CART", payload: items });
+          },
+        );
+
+        // Cleanup function to unsubscribe from all listeners when the component unmounts
+        return () => {
+          unsubscribeUserDetails?.();
+          unsubscribeOrders?.();
+          unsubscribeWishlist?.();
+          unsubscribeToCart?.();
+        };
+      } else {
+        // If the user is not authenticated, set loading states and clear data
+        dispatch({ type: "SET_AUTHENTICATED", payload: false });
+        dispatch({ type: "SET_LOADING_WISHLIST", payload: false });
+        dispatch({ type: "CLEAR_WISHLIST" });
+        dispatch({
+          type: "SET_USER_DETAILS",
+          payload: { userDetails: null, loadingUserDetails: true },
+        });
+        dispatch({
+          type: "SET_USER_ORDER",
+          payload: { userOrders: [], loadingUserOrders: true },
+        });
+        dispatch({
+          type: "SET_CART",
+          payload: JSON.parse(localStorage.getItem("cartItems") ?? "[]"),
+        });
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    // If the user is not authenticated, save the cart to localStorage
+    if (!state.isAuthenticated) {
+      localStorage.setItem("cartItems", JSON.stringify(state.cart));
+    }
+  }, [state.cart, state.isAuthenticated]);
+
+  return (
+    <ShopContext.Provider value={{ state, dispatch }}>
+      {children}
+    </ShopContext.Provider>
+  );
+};
