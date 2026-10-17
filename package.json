@@ -1,8 +1,8 @@
 {
-  "name": "shop-app",
+  "name": "cartify",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://1obanov.github.io/shop-app",
+  "homepage": "https://1obanov.github.io/cartify",
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@testing-library/jest-dom": "^5.17.0",
