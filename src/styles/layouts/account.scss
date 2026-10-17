@@ -1,3 +1,5 @@
+@use "../base/mixins" as mixins;
+
 .account {
   padding: 50px 0 100px;
 
@@ -141,10 +143,10 @@
     .image {
       width: 100%;
 
-      @include image-container;
+      @include mixins.image-container;
 
       .no-image {
-        @include no-image;
+        @include mixins.no-image;
       }
     }
   }

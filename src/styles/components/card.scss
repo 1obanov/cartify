@@ -1,3 +1,5 @@
+@use "../base/mixins" as mixins;
+
 .card {
   position: relative;
   display: flex;
@@ -20,7 +22,7 @@
   &__img {
     width: 100%;
 
-    @include image-container;
+    @include mixins.image-container;
 
     .discount {
       position: absolute;
@@ -56,7 +58,7 @@
     }
 
     .no-image {
-      @include no-image;
+      @include mixins.no-image;
     }
 
     .btn {
@@ -65,6 +67,7 @@
       left: 50%;
       opacity: 0;
       transform: translateX(-50%);
+      transition: opacity 0.3s;
 
       @media (max-width: 767px) {
         top: calc(100% - 34px - 20px);

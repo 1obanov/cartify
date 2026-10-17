@@ -10,7 +10,6 @@
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^11.2.0",
     "lucide-react": "^0.482.0",
-    "node-sass": "^7.0.3",
     "postcss": "^8.4.39",
     "react": "^18.3.1",
     "react-datepicker": "^8.2.1",
@@ -28,7 +27,6 @@
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "build-css": "node-sass src/styles/style.scss -o src/styles",
     "format:styles": "prettier --write \"src/styles/**/*.scss\" && stylelint \"src/styles/**/*.scss\" --fix",
     "check:styles": "prettier --check \"src/styles/**/*.scss\" && stylelint \"src/styles/**/*.scss\"",
     "test": "react-scripts test",
@@ -59,6 +57,7 @@
     "@types/react-dom": "^18.3.7",
     "gh-pages": "^6.3.0",
     "prettier": "^3.5.3",
+    "sass": "^1.105.2",
     "stylelint": "^17.16.0",
     "stylelint-config-standard-scss": "^17.0.0",
     "stylelint-order": "^8.1.2",

@@ -1,3 +1,5 @@
+@use "../base/mixins" as mixins;
+
 .cart-card {
   display: grid;
   align-items: flex-start;
@@ -11,10 +13,10 @@
   &__img {
     width: 100%;
 
-    @include image-container;
+    @include mixins.image-container;
 
     .no-image {
-      @include no-image;
+      @include mixins.no-image;
     }
   }
 

@@ -1,3 +1,5 @@
+@use "../base/mixins" as mixins;
+
 .order-card {
   display: flex;
   align-items: center;
@@ -28,16 +30,16 @@
     height: 0;
     flex-shrink: 0;
 
-    @include image-container(100px);
+    @include mixins.image-container(100px);
 
     .no-image {
-      @include no-image;
+      @include mixins.no-image;
     }
 
     &--small {
       width: 60px;
 
-      @include image-container(60px);
+      @include mixins.image-container(60px);
     }
   }
 

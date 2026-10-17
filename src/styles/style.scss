@@ -1,36 +1,35 @@
+@use "./base/common";
+
+@use "./components/headline";
+@use "./components/card";
+@use "./components/rating";
+@use "./components/loader-line";
+@use "./components/header";
+@use "./components/footer";
+@use "./components/cart-card";
+@use "./components/summary-box";
+@use "./components/mini-cart";
+@use "./components/order-card";
+@use "./components/breadcrumb";
+@use "./components/quantity";
+@use "./components/billing-details";
+@use "./components/checkout-success";
+@use "./components/account-menu";
+@use "./components/react-datepicker-popper";
+@use "./components/form";
+@use "./components/checkout-stepper";
+@use "./components/checkout-main";
+@use "./components/toastify";
+
+@use "./layouts/product-details";
+@use "./layouts/wishlist";
+@use "./layouts/cart";
+@use "./layouts/checkout";
+@use "./layouts/not-found";
+@use "./layouts/order-success";
+@use "./layouts/auth";
+@use "./layouts/reset-password";
+@use "./layouts/account";
+
 @import url("https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Ubuntu+Sans+Mono:ital,wght@0,400..700;1,400..700&display=swap");
-
-@import "./base/_mixins";
-@import "./base/common";
-
-@import "./components/headline";
-@import "./components/card";
-@import "./components/rating";
-@import "./components/loader-line";
-@import "./components/header";
-@import "./components/footer";
-@import "./components/cart-card";
-@import "./components/summary-box";
-@import "./components/mini-cart";
-@import "./components/order-card";
-@import "./components/breadcrumb";
-@import "./components/quantity";
-@import "./components/billing-details";
-@import "./components/checkout-success";
-@import "./components/account-menu";
-@import "./components/react-datepicker-popper";
-@import "./components/form";
-@import "./components/checkout-stepper";
-@import "./components/checkout-main";
-@import "./components/toastify";
-
-@import "./layouts/product-details";
-@import "./layouts/wishlist";
-@import "./layouts/cart";
-@import "./layouts/checkout";
-@import "./layouts/not-found";
-@import "./layouts/order-success";
-@import "./layouts/auth";
-@import "./layouts/reset-password";
-@import "./layouts/account";
