@@ -1,10 +1,10 @@
-# Shop App
+# Cartify
 
-> The Shop App is a dynamic React-based e-commerce application that allows users to browse products, manage their cart and wishlist, place orders, and handle account settings seamlessly.
+> The Cartify is a dynamic React-based e-commerce application that allows users to browse products, manage their cart and wishlist, place orders, and handle account settings seamlessly.
 
 ### Preview
 
-Explore the live demo of the **Shop App** [here](https://1obanov.github.io/shop-app/#/).
+Explore the live demo of the **Cartify** [here](https://1obanov.github.io/cartify/#/).
 
 ### Features
 
@@ -45,7 +45,7 @@ Explore the live demo of the **Shop App** [here](https://1obanov.github.io/shop-
 
 ```
 # Clone the repository
-git clone https://github.com/your-username/shop-app.git
+git clone https://github.com/your-username/cartify.git
 
 # Navigate to the project directory
 cd shop-app
