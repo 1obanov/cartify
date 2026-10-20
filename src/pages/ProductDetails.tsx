@@ -9,7 +9,7 @@ import { House, Heart, TriangleAlert } from "lucide-react";
 import { useShopContext } from "../context/context";
 
 import "toastify-js/src/toastify.css";
-import { Product } from "../types/product";
+import type { Product } from "../types/product";
 
 type HandleQuantityChange = "increment" | "decrement";
 
