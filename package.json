@@ -27,8 +27,8 @@
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
-    "format:styles": "prettier --write \"src/styles/**/*.scss\" && stylelint \"src/styles/**/*.scss\" --fix",
     "check:styles": "prettier --check \"src/styles/**/*.scss\" && stylelint \"src/styles/**/*.scss\"",
+    "format:styles": "prettier --write \"src/styles/**/*.scss\" && stylelint \"src/styles/**/*.scss\" --fix",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",

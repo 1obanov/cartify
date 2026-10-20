@@ -9,6 +9,7 @@ import { House, Heart, TriangleAlert } from "lucide-react";
 import { useShopContext } from "../context/context";
 
 import "toastify-js/src/toastify.css";
+import { Product } from "../types/product";
 
 type HandleQuantityChange = "increment" | "decrement";
 
@@ -25,35 +26,37 @@ function ProductDetails() {
     const controller = new AbortController();
     setProductError("");
 
-    fetch(`https://dummyjson.com/products/${id}`, {
-      signal: controller.signal,
-    })
-      .then((response) => {
+    async function fetchProduct() {
+      try {
+        const response = await fetch(`https://dummyjson.com/products/${id}`, {
+          signal: controller.signal,
+        });
+
         if (!response.ok) {
           throw new Error(
             `Product request failed with status ${response.status}`,
           );
         }
-        return response.json();
-      })
-      .then((data) => {
+
+        const data: Product = await response.json();
+
         if (!data || !data.id) {
           throw new Error("Product was missing from the API response");
         }
 
         dispatch({ type: "SET_PRODUCT", payload: data });
-      })
-      .catch((error: unknown) => {
+      } catch (error: unknown) {
         if (error instanceof Error && error.name === "AbortError") {
           return;
         }
-
         console.error("Error fetching product details:", error);
         setProductError("Could not load this product. Please try again later.");
         dispatch({ type: "SET_LOADING_PRODUCT", payload: false });
-      });
+      }
+    }
 
-    // Clear the product when the component unmounts or the id changes.
+    fetchProduct();
+
     return () => {
       controller.abort();
       dispatch({ type: "CLEAR_PRODUCT" });

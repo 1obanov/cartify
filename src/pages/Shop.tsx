@@ -3,6 +3,7 @@ import { GoodsList } from "../components/goods/GoodsList";
 import { Preloader } from "../components/shared/Preloader";
 import { TriangleAlert } from "lucide-react";
 import { useShopContext } from "../context/context";
+import type { ProductList } from "../types/product";
 
 function Shop() {
   const { state, dispatch } = useShopContext();
@@ -14,25 +15,29 @@ function Shop() {
 
     const controller = new AbortController();
 
-    fetch("https://dummyjson.com/products?limit=50", {
-      signal: controller.signal,
-    })
-      .then((response) => {
+    async function fetchProducts() {
+      try {
+        const response = await fetch(
+          "https://dummyjson.com/products?limit=50",
+          {
+            signal: controller.signal,
+          },
+        );
+
         if (!response.ok) {
           throw new Error(
             `Products request failed with status ${response.status}`,
           );
         }
-        return response.json();
-      })
-      .then((data) => {
+
+        const data: ProductList = await response.json();
+
         if (!Array.isArray(data?.products) || data.products.length === 0) {
           throw new Error("Products were missing from the API response");
         }
 
         dispatch({ type: "SET_GOODS", payload: data.products });
-      })
-      .catch((error: unknown) => {
+      } catch (error: unknown) {
         if (error instanceof Error && error.name === "AbortError") {
           return;
         }
@@ -40,7 +45,10 @@ function Shop() {
         console.error("Error fetching products:", error);
         setShopError("Could not load products. Please try again.");
         dispatch({ type: "SET_LOADING_GOODS", payload: false });
-      });
+      }
+    }
+
+    fetchProducts();
 
     return () => controller.abort();
   }, [goods, dispatch, shopError]);
