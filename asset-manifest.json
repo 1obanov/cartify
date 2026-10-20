@@ -1,11 +1,11 @@
 {
   "files": {
     "main.css": "/cartify/static/css/main.5df195db.css",
-    "main.js": "/cartify/static/js/main.bf7e2444.js",
+    "main.js": "/cartify/static/js/main.4587d2bc.js",
     "index.html": "/cartify/index.html"
   },
   "entrypoints": [
     "static/css/main.5df195db.css",
-    "static/js/main.bf7e2444.js"
+    "static/js/main.4587d2bc.js"
   ]
 }
