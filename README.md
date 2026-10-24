@@ -28,10 +28,11 @@ Explore the live demo of the **Cartify** [here](https://1obanov.github.io/cartif
 
 - React
 - React Router
-- JavaScript/TypeScript
+- TypeScript
 - SCSS
 - API Integration
 - Firebase
+- Vite
 
 ### How to Use
 
