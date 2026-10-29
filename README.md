@@ -46,7 +46,7 @@ Explore the live demo of the **Cartify** [here](https://1obanov.github.io/cartif
 
 ```
 # Clone the repository
-git clone https://github.com/your-username/cartify.git
+git clone https://github.com/1obanov/cartify.git
 
 # Navigate to the project directory
 cd cartify
@@ -55,5 +55,5 @@ cd cartify
 npm install
 
 # Start the development server
-npm start
+npm run dev
 ```
